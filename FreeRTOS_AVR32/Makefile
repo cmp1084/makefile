@@ -1,8 +1,6 @@
-
 #*****************************************************************************
 #
 #    Copyright 2010 Marcus Jansson <mjansson256@yahoo.se>
-#
 #
 #    This file is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -85,7 +83,6 @@ LINKDIR= \
 LINKSCRIPT = $(SFDIR)/UTILS/LINKER_SCRIPTS/AT32UC3A/0512/GCC/link_uc3a0512.lds
 
 OBJECT = $(SOURCE:%.c=%.o) $(STARTUP:%.x=%.o)
-STARTUPOBJECT =
 
 #####################################################################
 #AVR32 specifics
@@ -105,7 +102,6 @@ DEBUG = -ggdb
 CFLAGS = $(INCDIR:%=-I%) $(DEBUG) -O0 -fdata-sections -g3 -Wall -c -fmessage-length=0 -mpart=$(PART) -DBOARD=$(BOARD) -ffunction-sections -masm-addr-pseudos
 AFLAGS = -x assembler-with-cpp
 LDFLAGS = -nostartfiles $(DEBUG) -T$(LINKSCRIPT) $(LINKDIR:%=-L%) -lnewlib_addons-at32ucr2-speed_opt -mpart=$(PART) -Wl,--gc-sections --rodata-writable -Wl,--direct-data -Wl,-e,_trampoline
-#~ VERBOSE = @
 
 #####################################################################
 #Compile rules below
@@ -125,7 +121,7 @@ compile: $(STARTUPOBJECT) $(OBJECT)
 link:
 	@echo -n .
 	$(VERBOSE)test -d $(BINDIR) || mkdir $(BINDIR)
-	$(VERBOSE)$(CC) $(LDFLAGS) $(STARTUPOBJECT) $(OBJECT) -o$(BINDIR)/$(PROGRAM).elf
+	$(VERBOSE)$(CC) $(LDFLAGS) $(OBJECT) -o$(BINDIR)/$(PROGRAM).elf
 
 objcopy:
 	@echo -n .
@@ -143,7 +139,6 @@ done:
 
 clean:
 	$(VERBOSE)rm -f \
-	$(STARTUPOBJECT) \
 	$(OBJECT) \
 	$(BINDIR)/$(PROGRAM).bin \
 	$(BINDIR)/$(PROGRAM).elf

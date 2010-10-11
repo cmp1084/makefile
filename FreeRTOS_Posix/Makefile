@@ -1,8 +1,6 @@
-
 #*****************************************************************************
 #
 #    Copyright 2010 Marcus Jansson <mjansson256@yahoo.se>
-#
 #
 #    This file is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -50,18 +48,13 @@ INCDIR = ./ \
 	$(FREERTOSDIR)/include \
 	$(FREERTOSDIR)/portable/GCC/Posix \
 
-STARTUP =
-LINKDIR =
-LINKSCRIPT =
-OBJECT = $(SOURCE:%.c=%.o)
-STARTUPOBJECT = $(STARTUP:%.x=%.o)
+OBJECT = $(SOURCE:%.c=%.o)  $(STARTUP:%.x=%.o)
 
 #####################################################################
 #PC specifics
 #####################################################################
 DEBUG = -ggdb
 CC = gcc
-
 
 #####################################################################
 #Compiler flags
@@ -71,13 +64,12 @@ CFLAGS = -DSIM=1 -DUSE_STDIO=1 -D__GCC_POSIX__=1 $(INCDIR:%=-I%) -O2 $(DEBUG) -W
 LDFLAGS = -pthread -lrt $(DEBUG)
 AFLAGS = -x assembler-with-cpp
 
-#~ VERBOSE = @
 #####################################################################
 #Compile rules below
 #####################################################################
 all: clean compile link done
 
-compile: $(STARTUPOBJECT) $(OBJECT)
+compile: $(OBJECT)
 
 %.o: %.x
 	@echo -n .
@@ -90,15 +82,13 @@ compile: $(STARTUPOBJECT) $(OBJECT)
 link:
 	@echo -n .
 	$(VERBOSE)test -d $(BINDIR) || mkdir $(BINDIR)
-	$(VERBOSE)$(CC) $(LDFLAGS) $(STARTUPOBJECT) $(OBJECT) -o$(BINDIR)/$(PROGRAM)
+	$(VERBOSE)$(CC) $(LDFLAGS) $(OBJECT) -o$(BINDIR)/$(PROGRAM)
 
 done:
-	@echo
 	@echo Done.
 	@echo
 
 clean:
 	$(VERBOSE)rm -f \
-	$(STARTUPOBJECT) \
 	$(OBJECT) \
 	$(BINDIR)/$(PROGRAM)

@@ -1,8 +1,6 @@
-
 #*****************************************************************************
 #
 #    Copyright 2010 Marcus Jansson <mjansson256@yahoo.se>
-#
 #
 #    This file is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,16 +15,17 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this file.  If not, see <http://www.gnu.org/licenses/>.
 #*****************************************************************************
+
 FREERTOS_AVR32 = FreeRTOS_AVR32
 FREERTOS_SIM = FreeRTOS_Posix
 
-VERBOSE = @
+export VERBOSE = @
 
 all: avr32 sim
 
 avr32:
-	@echo Making FreeRTOS for AVR32 and EVK1100
-	@make -sC $(FREERTOS_AVR32)
+	@echo \* Making FreeRTOS for AVR32 and EVK1100
+	@make --no-print-directory -C $(FREERTOS_AVR32)
 
 clean: avr32clean simclean
 
@@ -38,8 +37,8 @@ program:
 
 
 sim:
-	@echo Making FreeRTOS for PC
-	@make -sC $(FREERTOS_SIM)
+	@echo \* Making FreeRTOS for PC
+	@make --no-print-directory -C $(FREERTOS_SIM)
 
 simclean:
 	@make -sC $(FREERTOS_SIM) clean
