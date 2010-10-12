@@ -33,33 +33,30 @@
 
 #include "FreeRTOSConfig.h"
 
-//~ static unsigned long uxQueueSendPassedCount = 0;
+static unsigned long uxQueueSendPassedCount = 0;
 
-//~ void vMainQueueSendPassed( void )
-//~ {
-	//~ /* This is just an example implementation of the "queue send" trace hook. */
-	//~ uxQueueSendPassedCount++;
-//~ }
+void vMainQueueSendPassed( void )
+{
+	/* This is just an example implementation of the "queue send" trace hook. */
+	uxQueueSendPassedCount++;
+}
 
-//~ void vApplicationIdleHook( void )
-//~ {
-	//~ /* The co-routines are executed in the idle task using the idle task hook. */
-	//~ vCoRoutineSchedule();	/* Comment this out if not using Co-routines. */
-
-//~ #ifdef SIM
-	//~ struct timespec xTimeToSleep, xTimeSlept;
-		//~ /* Makes the process more agreeable when using the Posix simulator. */
-		//~ xTimeToSleep.tv_sec = 1;
-		//~ xTimeToSleep.tv_nsec = 0;
-		//~ nanosleep( &xTimeToSleep, &xTimeSlept );
-//~ #endif
-//~ }
+void vApplicationIdleHook( void )
+{
+#ifdef SIM
+	/* Makes the process more agreeable when using the simulator. */
+	struct timespec xTimeToSleep, xTimeSlept;
+	xTimeToSleep.tv_sec = 1;
+	xTimeToSleep.tv_nsec = 0;
+	nanosleep( &xTimeToSleep, &xTimeSlept );
+#endif
+}
 
 int doprint(const char * str)
 {
 	#ifdef SIM
 	printf("%s", str);
-	#else
+	#else //AVR32
 	//Send to usart, or something similar
 	#endif
 	return 0;
