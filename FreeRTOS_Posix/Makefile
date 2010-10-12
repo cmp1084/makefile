@@ -25,7 +25,6 @@ PROGRAM = freertos_sim
 #The directorys where the source is, and where the binary should go.
 #####################################################################
 DIR = .
-#FREERTOSDIR = $(DIR)/FreeRTOS_Kernel TODO: Really_
 BINDIR = ../bin
 PORTABLEDIR = $(FREERTOSDIR:%=../%)/portable
 
@@ -43,6 +42,7 @@ SOURCE = \
 #####################################################################
 INCDIR = ./ \
 	$(DIR)/CONFIG \
+	$(FREERTOSDIR:%=../%) \
 	$(FREERTOSDIR:%=../%)/include \
 	$(FREERTOSDIR:%=../%)/portable/GCC/Posix \
 	$(OTHERINCDIR:%=../%) \

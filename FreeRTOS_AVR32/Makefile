@@ -59,6 +59,7 @@ INCDIR = \
 	$(SFDIR)/DRIVERS/PM \
 	$(SFDIR)/DRIVERS/TC \
 	$(SFDIR)/DRIVERS/USART \
+	$(FREERTOSDIR:%=../%) \
 	$(FREERTOSDIR:%=../%)/include \
 	$(FREERTOSDIR:%=../%)/portable/GCC/AVR32_UC3 \
 	$(SFDIR)/UTILS/ \
