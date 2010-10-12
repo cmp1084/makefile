@@ -25,28 +25,27 @@ PROGRAM = freertos_sim
 #The directorys where the source is, and where the binary should go.
 #####################################################################
 DIR = .
-FREERTOSDIR = $(DIR)/FreeRTOS_Kernel
+#FREERTOSDIR = $(DIR)/FreeRTOS_Kernel TODO: Really_
 BINDIR = ../bin
+PORTABLEDIR = $(FREERTOSDIR:%=../%)/portable
 
 #####################################################################
 #The source files which should be compiled.
 #####################################################################
 SOURCE = \
-	$(FREERTOSDIR)/portable/GCC/Posix/port.c \
-	$(FREERTOSDIR)/portable/MemMang/heap_3.c \
-	$(FREERTOSDIR)/croutine.c \
-	$(FREERTOSDIR)/queue.c \
-	$(FREERTOSDIR)/tasks.c \
-	$(FREERTOSDIR)/list.c \
-	$(DIR)/main.c
+	$(PORTABLEDIR)/GCC/Posix/port.c \
+	$(PORTABLEDIR)/MemMang/heap_3.c \
+	$(FREERTOSSOURCE:%=../%) \
+	$(OTHERSOURCE:%=../%)
 
 #####################################################################
 #Include files are in these directories.
 #####################################################################
 INCDIR = ./ \
 	$(DIR)/CONFIG \
-	$(FREERTOSDIR)/include \
-	$(FREERTOSDIR)/portable/GCC/Posix \
+	$(FREERTOSDIR:%=../%)/include \
+	$(FREERTOSDIR:%=../%)/portable/GCC/Posix \
+	$(OTHERINCDIR:%=../%) \
 
 OBJECT = $(SOURCE:%.c=%.o)  $(STARTUP:%.x=%.o)
 

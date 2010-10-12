@@ -16,32 +16,73 @@
 #    along with this file.  If not, see <http://www.gnu.org/licenses/>.
 #*****************************************************************************
 
+#####################################################################
+#
+#####################################################################
 FREERTOS_AVR32 = FreeRTOS_AVR32
 FREERTOS_SIM = FreeRTOS_Posix
 
-export VERBOSE = @
+#####################################################################
+#
+#####################################################################
+export
+MAKE = make
+ECHO = echo
+
+#####################################################################
+#The FreeRTOS source directory
+#####################################################################
+FREERTOSDIR = FreeRTOS/Source
+
+#####################################################################
+#The FreeRTOS source files
+#####################################################################
+FREERTOSSOURCE = \
+	$(FREERTOSDIR)/croutine.c \
+	$(FREERTOSDIR)/queue.c \
+	$(FREERTOSDIR)/tasks.c \
+	$(FREERTOSDIR)/list.c \
+
+#####################################################################
+#Set other source files here
+#####################################################################
+OTHERSOURCEDIR = src
+OTHERSOURCE = \
+	$(OTHERSOURCEDIR)/main.c
+
+#####################################################################
+#Set other include directorys here
+#####################################################################
+OTHERINCDIR = \
+	$(OTHERSOURCEDIR)/ \
+
+
+#####################################################################
+#Make rules
+#####################################################################
+VERBOSE = @
 
 all: avr32 sim
 
 avr32:
-	@echo \* Making FreeRTOS for AVR32 and EVK1100
-	@make --no-print-directory -C $(FREERTOS_AVR32)
+	$(VERBOSE)$(ECHO) Making FreeRTOS for AVR32 and EVK1100
+	$(VERBOSE)$(MAKE) --no-print-directory -C $(FREERTOS_AVR32)
 
 clean: avr32clean simclean
 
 avr32clean:
-	@make -sC $(FREERTOS_AVR32) clean
+	$(VERBOSE)$(MAKE) -sC $(FREERTOS_AVR32) clean
 
 program:
-	@make -sC $(FREERTOS_AVR32) program
+	$(VERBOSE)$(MAKE) -sC $(FREERTOS_AVR32) program
 
 
 sim:
-	@echo \* Making FreeRTOS for PC
-	@make --no-print-directory -C $(FREERTOS_SIM)
+	$(VERBOSE)$(ECHO) Making FreeRTOS for PC
+	$(VERBOSE)$(MAKE) --no-print-directory -C $(FREERTOS_SIM)
 
 simclean:
-	@make -sC $(FREERTOS_SIM) clean
+	$(VERBOSE)$(MAKE) -sC $(FREERTOS_SIM) clean
 
 run:
-	@make -sC $(FREERTOS_SIM) run
+	$(VERBOSE)$(MAKE) -sC $(FREERTOS_SIM) run

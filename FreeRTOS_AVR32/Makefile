@@ -27,7 +27,7 @@ PROGRAM = freertos_avr32
 DIR = src
 BINDIR = ../bin
 SFDIR = $(DIR)/SOFTWARE_FRAMEWORK
-FREERTOSDIR = $(SFDIR)/SERVICES/FREERTOS/Source
+PORTABLEDIR = $(FREERTOSDIR:%=../%)/portable
 
 #####################################################################
 #The source files which should be compiled.
@@ -41,13 +41,10 @@ SOURCE = \
 	$(SFDIR)/DRIVERS/PM/pm_conf_clocks.c \
 	$(SFDIR)/DRIVERS/TC/tc.c \
 	$(SFDIR)/DRIVERS/USART/usart.c \
-	$(FREERTOSDIR)/portable/GCC/AVR32_UC3/port.c \
-	$(FREERTOSDIR)/portable/MemMang/heap_3.c \
-	$(FREERTOSDIR)/croutine.c \
-	$(FREERTOSDIR)/queue.c \
-	$(FREERTOSDIR)/tasks.c \
-	$(FREERTOSDIR)/list.c \
-	$(DIR)/main.c
+	$(PORTABLEDIR)/GCC/AVR32_UC3/port.c \
+	$(PORTABLEDIR)/MemMang/heap_3.c \
+	$(FREERTOSSOURCE:%=../%) \
+	$(OTHERSOURCE:%=../%)
 
 #####################################################################
 #Include files are in these directories.
@@ -62,11 +59,12 @@ INCDIR = \
 	$(SFDIR)/DRIVERS/PM \
 	$(SFDIR)/DRIVERS/TC \
 	$(SFDIR)/DRIVERS/USART \
-	$(FREERTOSDIR)/include \
-	$(FREERTOSDIR)/portable/GCC/AVR32_UC3 \
+	$(FREERTOSDIR:%=../%)/include \
+	$(FREERTOSDIR:%=../%)/portable/GCC/AVR32_UC3 \
 	$(SFDIR)/UTILS/ \
 	$(SFDIR)/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE \
-	$(SFDIR)/UTILS/PREPROCESSOR
+	$(SFDIR)/UTILS/PREPROCESSOR \
+	$(OTHERINCDIR:%=../%)
 
 #####################################################################
 #Other files that are needed
@@ -74,7 +72,7 @@ INCDIR = \
 STARTUP = \
 	$(SFDIR)/ASM/trampoline.x \
 	$(SFDIR)/UTILS/STARTUP_FILES/GCC/crt0.x \
-	$(FREERTOSDIR)/portable/GCC/AVR32_UC3/exception.x
+	$(FREERTOSDIR:%=../%)/portable/GCC/AVR32_UC3/exception.x
 
 LINKDIR= \
 	$(SFDIR)/UTILS/LIBS/NEWLIB_ADDONS \
@@ -108,15 +106,24 @@ LDFLAGS = -nostartfiles $(DEBUG) -T$(LINKSCRIPT) $(LINKDIR:%=-L%) -lnewlib_addon
 #####################################################################
 all: clean compile link objcopy done
 
+print:
+	$(VERBOSE)$(ECHO) "PORTABLEDIR = $(PORTABLEDIR)"
+	$(VERBOSE)$(ECHO) "SOURCE = $(SOURCE)"
+
 compile: $(STARTUPOBJECT) $(OBJECT)
 
 %.o: %.x
 	@echo -n .
 	$(VERBOSE)$(CC) $(CFLAGS) $(AFLAGS) $< -o$@
 
+#~ ../FreeRTOS/Source/portable/GCC/AVR32_UC3/port.o: ../FreeRTOS/Source/portable/GCC/AVR32_UC3/port.c
+#	#~ @echo -n .
+#	#~ $(VERBOSE)$(CC) $(CFLAGS) $< -o$@
+
 %.o: %.c
 	@echo -n .
 	$(VERBOSE)$(CC) $(CFLAGS) $< -o$@
+
 
 link:
 	@echo -n .
