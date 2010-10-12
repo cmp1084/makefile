@@ -47,38 +47,49 @@ OTHERINCDIR = \
 #####################################################################
 #Directories where specific code for AVR32 or sim is located
 #####################################################################
-FREERTOS_AVR32 = FreeRTOS_AVR32
-FREERTOS_SIM = FreeRTOS_Posix
+FREERTOS_AVR32 = specific_avr32
+FREERTOS_SIM = specific_posix
 
 #####################################################################
 #Make rules
 #####################################################################
 export
+ifeq ($(V),1)
 VERBOSE = @
+NOPRINT =
+endif
+ifndef V
+VERBOSE = @
+NOPRINT = --no-print-directory
+endif
+
+
 MAKE = make
 ECHO = echo
 
 all: avr32 sim
 
 avr32:
-	$(VERBOSE)$(ECHO) Making FreeRTOS for AVR32 and EVK1100
-	$(VERBOSE)$(MAKE) --no-print-directory -C $(FREERTOS_AVR32)
+	$(VERBOSE)$(ECHO) Compiling FreeRTOS for AVR32 and EVK1100
+	$(VERBOSE)$(MAKE) $(NOPRINT) -C $(FREERTOS_AVR32)
+	$(VERBOSE)$(ECHO)
 
 clean: avr32clean simclean
 
 avr32clean:
-	$(VERBOSE)$(MAKE) -sC $(FREERTOS_AVR32) clean
+	$(VERBOSE)$(MAKE) $(NOPRINT) -C $(FREERTOS_AVR32) clean
 
 program:
-	$(VERBOSE)$(MAKE) -sC $(FREERTOS_AVR32) program
+	$(VERBOSE)$(MAKE) $(NOPRINT) -C $(FREERTOS_AVR32) program
 
 
 sim:
-	$(VERBOSE)$(ECHO) Making FreeRTOS for PC
-	$(VERBOSE)$(MAKE) --no-print-directory -C $(FREERTOS_SIM)
+	$(VERBOSE)$(ECHO) Compiling FreeRTOS for PC
+	$(VERBOSE)$(MAKE) $(NOPRINT) -C $(FREERTOS_SIM)
+	$(VERBOSE)$(ECHO)
 
 simclean:
-	$(VERBOSE)$(MAKE) -sC $(FREERTOS_SIM) clean
+	$(VERBOSE)$(MAKE) --no-print-directory -C $(FREERTOS_SIM) clean
 
 run:
-	$(VERBOSE)$(MAKE) -sC $(FREERTOS_SIM) run
+	$(VERBOSE)$(MAKE) --no-print-directory -C $(FREERTOS_SIM) run

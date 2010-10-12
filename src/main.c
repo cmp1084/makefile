@@ -5,13 +5,13 @@
  Description   : EVK1100 template
  **********************************************************/
 
-// Include Files
+//AVR32 includes
 #ifndef SIM
 #include "board.h"
 #endif
 
+//Simulator includes
 #ifdef SIM
-// System includes
 #include <stdio.h>
 #include <time.h>
 #include <sys/time.h>
@@ -26,20 +26,12 @@
 #include <unistd.h>
 #endif
 
+//FreeRTOS includes
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
 #include "croutine.h"
 
-#include "FreeRTOSConfig.h"
-
-static unsigned long uxQueueSendPassedCount = 0;
-
-void vMainQueueSendPassed( void )
-{
-	/* This is just an example implementation of the "queue send" trace hook. */
-	uxQueueSendPassedCount++;
-}
 
 void vApplicationIdleHook( void )
 {
@@ -52,6 +44,7 @@ void vApplicationIdleHook( void )
 #endif
 }
 
+//Just a small example
 int doprint(const char * str)
 {
 	#ifdef SIM
@@ -62,6 +55,7 @@ int doprint(const char * str)
 	return 0;
 }
 
+//Just a small example
 void task1(void * p)
 {
 	while(1) {
@@ -90,7 +84,7 @@ void task3(void * p)
 
 int main(void)
 {
-
+	//Just a small example
 	xTaskCreate(task1, (const signed portCHAR *) "task1", 128, NULL, 1, NULL);
 	xTaskCreate(task2, (const signed portCHAR *) "task2", 128, NULL, 1, NULL);
 #ifdef SIM
